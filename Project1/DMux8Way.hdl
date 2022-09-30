@@ -1,0 +1,55 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux8Way.hdl
+
+/**
+ * 8-way demultiplexor:
+ * {a, b, c, d, e, f, g, h} = {in, 0, 0, 0, 0, 0, 0, 0} if sel == 000
+ *                            {0, in, 0, 0, 0, 0, 0, 0} if sel == 001
+ *                            etc.
+ *                            {0, 0, 0, 0, 0, 0, 0, in} if sel == 111
+ */
+
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    // Put your code here:
+    Not(in=sel[0],out=notsel0);
+    Not(in=sel[1],out=notsel1);
+    Not(in=sel[2],out=notsel2);
+
+    And(a=notsel0,b=notsel1,out=d1a);
+    And(a=d1a,b=notsel2,out=d1);                    //For Data Channel A
+    And(a=in,b=d1,out=a);
+
+    And(a=sel[0],b=notsel1,out=d2a);
+    And(a=d2a,b=notsel2,out=d2);                    //For Data Channel B
+    And(a=in,b=d2,out=b);
+
+    And(a=notsel0,b=sel[1],out=d3a);
+    And(a=d3a,b=notsel2,out=d3);                    //For Data Channel C
+    And(a=in,b=d3,out=c);
+
+    And(a=sel[0],b=sel[1],out=d4a);
+    And(a=d4a,b=notsel2,out=d4);                    //For Data Channel D
+    And(a=in,b=d4,out=d);
+
+    And(a=notsel0,b=notsel1,out=d5a);
+    And(a=d5a,b=sel[2],out=d5);                    //For Data Channel E
+    And(a=in,b=d5,out=e);
+
+    And(a=sel[0],b=notsel1,out=d6a);
+    And(a=d6a,b=sel[2],out=d6);                    //For Data Channel F
+    And(a=in,b=d6,out=f);
+
+    And(a=notsel0,b=sel[1],out=d7a);
+    And(a=d7a,b=sel[2],out=d7);                    //For Data Channel G
+    And(a=in,b=d7,out=g);
+
+    And(a=sel[0],b=sel[1],out=d8a);
+    And(a=d8a,b=sel[2],out=d8);                    //For Data Channel H
+    And(a=in,b=d8,out=h);
+}
